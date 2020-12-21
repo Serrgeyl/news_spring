@@ -7,7 +7,8 @@ import by.it.news.service.NewsService;
 import by.it.news.service.NewsServiceException;
 import by.it.news.service.validation.NewsValidator;
 import by.it.news.service.validation.NewsValidatorException;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,32 +18,22 @@ import java.util.List;
 @Service
 public class NewsServiceImpl implements NewsService {
 
-    //    private static final Logger logger = Logger.getLogger(NewsServiceImpl.class);
     @Autowired
     private NewsDao newsDao;
-
-/*    @Autowired
-    public void setNewsDAO(NewsDao newsDao) {
-        this.newsDao = newsDao;
-    }*/
-
-    @Autowired
-    public void setNewsDao(NewsDao newsDao) {
-        this.newsDao = newsDao;
-    }
+    private static final Logger logger = LogManager.getLogger(NewsServiceImpl.class);
 
 
     @Override
     @Transactional
     public void createNews(News news) throws NewsServiceException {
         if (!NewsValidator.isCorrect(news)) {
-//            logger.info("Data validation error.");
+            logger.warn("Data validation error.");
             throw new NewsValidatorException("Data validation error.");
         }
         try {
             newsDao.create(news);
         } catch (NewsDaoException e) {
-            //           logger.error(e);
+            logger.error(e);
             throw new NewsServiceException(e);
         }
     }
@@ -51,13 +42,13 @@ public class NewsServiceImpl implements NewsService {
     @Transactional
     public void updateNews(News news) throws NewsServiceException {
         if (!NewsValidator.isCorrect(news)) {
-//            logger.info("Data validation error.");
+            logger.warn("Data validation error.");
             throw new NewsValidatorException("Data validation error.");
         }
         try {
             newsDao.update(news);
         } catch (NewsDaoException e) {
-//            logger.error(e);
+            logger.error(e);
             throw new NewsServiceException(e);
         }
     }
@@ -68,7 +59,7 @@ public class NewsServiceImpl implements NewsService {
         try {
             newsDao.delete(id);
         } catch (NewsDaoException e) {
-            //           logger.error(e);
+            logger.error(e);
             throw new NewsServiceException(e);
         }
     }
@@ -80,7 +71,7 @@ public class NewsServiceImpl implements NewsService {
         try {
             news = newsDao.newsById(id);
         } catch (NewsDaoException e) {
-//            logger.error(e);
+            logger.error(e);
             throw new NewsServiceException(e);
         }
         return news;
@@ -93,7 +84,7 @@ public class NewsServiceImpl implements NewsService {
         try {
             newsList = newsDao.allNews();
         } catch (NewsDaoException e) {
-//            logger.error(e);
+            logger.error(e);
             throw new NewsServiceException(e);
         }
         return newsList;

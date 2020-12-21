@@ -1,7 +1,8 @@
 package by.it.news.service.validation;
 
 import by.it.news.entity.News;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -16,7 +17,7 @@ import java.util.regex.Pattern;
 public class NewsValidator {
     private final static String FILE_NAME = "validator.txt";
     private final static String DEFAULT_SPLITTER = " ";
-//    private static final Logger logger = LogManager.getLogger(NewsValidator.class);
+    private static final Logger logger = LogManager.getLogger(NewsValidator.class);
 
     public static boolean isCorrect(News news) {
         String file = null;
@@ -27,7 +28,7 @@ public class NewsValidator {
         try {
             file = NewsValidator.getFile(FILE_NAME);
         } catch (URISyntaxException | IOException e) {
- //           logger.error(e);
+            logger.error(e);
         }
         String[] words = file.split(DEFAULT_SPLITTER);
 
